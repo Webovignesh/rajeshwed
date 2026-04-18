@@ -1,0 +1,939 @@
+/* ============================================================
+   WEDDING INVITATION — styles.css  v3 (FIXED)
+   Fixes:
+    • Hero headline centred (text-align: center on hero__content)
+    • Sections use height: auto + fit-content, not min-height:100vh
+      so mobile has NO empty scroll gaps
+    • Vinayagar symbol enlarged: 52px → 90px
+    • Temple left edge enlarged: 22% → 38%
+    • ALL thin fonts bumped: weights 400→600/700, sizes increased
+      so elderly users can read comfortably
+   ============================================================ */
+
+/* ── CSS Custom Properties ─────────────────────────────────── */
+:root {
+  --color-bg:         #f5efe6;
+  --color-maroon:     #7b1c2b;
+  --color-gold:       #b8922a;
+  --color-gold-pale:  #e8c96a;
+  --color-text:       #2c1a0e;
+  --color-text-muted: #5a3b26;   /* darkened from #6b4c35 for readability */
+  --color-text-soft:  #7a5840;   /* darkened from #9a7358 for readability */
+  --color-cream:      #fdf6ec;
+  --color-border:     rgba(184, 146, 42, 0.35);
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Cormorant Garamond', Georgia, serif;
+
+  /* Tight, controlled spacing — avoids gaps on mobile */
+  --space-xs:  0.5rem;
+  --space-sm:  0.875rem;
+  --space-md:  1.375rem;
+  --space-lg:  2.25rem;
+  --space-xl:  3rem;
+
+  --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast:  300ms;
+  --duration-slow:  750ms;
+}
+
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 17px;              /* slightly larger base for elderly users */
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: 500;             /* base weight = medium, never light/thin */
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+img, svg { display: block; max-width: 100%; }
+a        { color: inherit; text-decoration: none; }
+button   { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+
+/* ── Scroll Progress Bar ───────────────────────────────────── */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0%;
+  height: 4px;                  /* slightly thicker — more visible */
+  background: linear-gradient(to right, var(--color-gold), var(--color-gold-pale), var(--color-gold));
+  z-index: 1000;
+  transition: width 80ms linear;
+  will-change: width;
+  box-shadow: 0 0 10px rgba(184, 146, 42, 0.65);
+}
+
+
+/* ── Music Toggle ──────────────────────────────────────────── */
+.music-toggle {
+  position: fixed;
+  bottom: 1.5rem; right: 1.25rem;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.875rem;
+  background: var(--color-cream);
+  border: 1.5px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-maroon);
+  box-shadow: 0 4px 20px rgba(123, 28, 43, 0.15);
+  transition: transform var(--duration-fast) var(--ease-out);
+  will-change: transform;
+  min-width: 48px; min-height: 48px;
+}
+.music-toggle:hover  { transform: scale(1.07); }
+.music-toggle:active { transform: scale(0.96); }
+.music-toggle .icon  { width: 22px; height: 22px; }
+
+.music-toggle .icon--playing { display: none; }
+.music-toggle .icon--muted   { display: block; }
+.music-toggle.is-playing .icon--muted   { display: none; }
+.music-toggle.is-playing .icon--playing { display: block; }
+
+.music-toggle__label {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+
+/* ── SHARED SECTION BASE ───────────────────────────────────── */
+/*
+  KEY FIX: Remove min-height: 100vh from ALL sections.
+  Each section is now exactly as tall as its content.
+  This eliminates all the empty scroll gaps on mobile.
+  Only the hero gets min-height: 100svh so it fills the screen on load.
+*/
+.section {
+  /* NO min-height here — height = content */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--space-xl) 1.25rem var(--space-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Parchment texture — full section fill behind content */
+.section__bg-texture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Content column — above texture */
+.section__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;                    /* tightened from 1.375rem */
+}
+
+.section__label {
+  font-family: var(--font-body);
+  font-size: 0.875rem;           /* was 0.8125 — larger for readability */
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  font-style: italic;
+}
+
+
+/* ── Scroll Animations ─────────────────────────────────────── */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity   var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+  will-change: opacity, transform;
+}
+.animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+
+[data-delay="0"]   { transition-delay: 0ms; }
+[data-delay="50"]  { transition-delay: 50ms; }
+[data-delay="60"]  { transition-delay: 60ms; }
+[data-delay="100"] { transition-delay: 100ms; }
+[data-delay="120"] { transition-delay: 120ms; }
+[data-delay="150"] { transition-delay: 150ms; }
+[data-delay="180"] { transition-delay: 180ms; }
+[data-delay="200"] { transition-delay: 200ms; }
+[data-delay="220"] { transition-delay: 220ms; }
+[data-delay="250"] { transition-delay: 250ms; }
+[data-delay="260"] { transition-delay: 260ms; }
+[data-delay="280"] { transition-delay: 280ms; }
+[data-delay="300"] { transition-delay: 300ms; }
+[data-delay="340"] { transition-delay: 340ms; }
+[data-delay="360"] { transition-delay: 360ms; }
+[data-delay="380"] { transition-delay: 380ms; }
+[data-delay="430"] { transition-delay: 430ms; }
+[data-delay="440"] { transition-delay: 440ms; }
+[data-delay="480"] { transition-delay: 480ms; }
+[data-delay="500"] { transition-delay: 500ms; }
+[data-delay="520"] { transition-delay: 520ms; }
+[data-delay="600"] { transition-delay: 600ms; }
+[data-delay="650"] { transition-delay: 650ms; }
+[data-delay="700"] { transition-delay: 700ms; }
+
+
+/* ── Dividers ──────────────────────────────────────────────── */
+.hero__divider {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  max-width: 220px;
+  margin: 0 auto;
+}
+.divider__line    { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--color-gold), transparent); }
+.divider__diamond { color: var(--color-gold); font-size: 0.65rem; flex-shrink: 0; }
+
+
+/* =============================================================
+   SECTION 1 · HERO
+   FIX: text-align: center added to hero__content
+        hero gets min-height: 100svh (fill screen on load only)
+        padding tightened
+   ============================================================= */
+.section--hero {
+  min-height: 100svh;           /* fills viewport on first load */
+  min-height: 100vh;            /* fallback for older browsers */
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+  justify-content: flex-start;
+}
+
+/* Banana trees — pinned bottom corners, multiply removes black bg */
+.hero__tree {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  width: 42%;
+  max-width: 200px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  object-fit: contain;
+  object-position: bottom;
+}
+.hero__tree--left  { left: 0; }
+.hero__tree--right { right: 0; transform: scaleX(-1); }
+
+/* Content column — CENTRE ALIGNED (FIX #1) */
+.hero__content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;           /* ← THIS WAS MISSING — caused left alignment */
+  gap: 0;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Vinayagar symbol — ENLARGED (FIX #3: 52px → 90px) */
+.hero__monogram {
+  margin-bottom: 1rem;
+}
+.hero__vinayagar {
+  width: 90px;                  /* was 52px — now clearly visible */
+  height: auto;
+  margin: 0 auto;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 3px 10px rgba(184,146,42,0.3));
+}
+
+/* Hero text block */
+.hero__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;           /* belt + suspenders for alignment */
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+.hero__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;         /* was 0.75 — slightly larger */
+  font-weight: 600;             /* was none — now medium-bold */
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+/* FIX #1: Hero headline centered, font weight boosted */
+.hero__headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 9vw, 3.5rem);   /* was 2.25 min — now larger */
+  font-weight: 700;             /* was 400 — now bold, clearly readable */
+  line-height: 1.12;
+  letter-spacing: 0.04em;
+  color: var(--color-maroon);
+  text-transform: uppercase;
+  text-align: center;           /* explicitly centred */
+  width: 100%;
+}
+
+.hero__date {
+  font-family: var(--font-display);
+  font-size: 1.175rem;          /* was 1.0625 */
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  letter-spacing: 0.06em;
+}
+
+/* Couple illustration */
+.hero__illustration {
+  width: 100%;
+  max-width: 310px;
+}
+.hero__couple-img {
+  width: 100%;
+  height: auto;
+  mix-blend-mode: multiply;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 8px 24px rgba(123,28,43,0.09));
+}
+
+/* Scroll cue */
+.hero__scroll-cue {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 1.25rem;
+  color: var(--color-text-soft);
+}
+.scroll-cue__text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-family: var(--font-body);
+}
+.scroll-cue__arrow {
+  width: 1px; height: 28px;
+  background: linear-gradient(to bottom, var(--color-text-soft), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50%       { opacity: 1;   transform: scaleY(1.35); }
+}
+
+
+/* =============================================================
+   SECTION 2 · COUPLE INTRO
+   FIX: removed big padding, content-height only
+   ============================================================= */
+.section--couple {
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-xl);
+}
+
+/* Names */
+.couple__names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+.couple__name {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 11vw, 4.5rem);   /* larger, bolder */
+  font-weight: 700;                         /* was 400 — now bold */
+  color: var(--color-maroon);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+.couple__ampersand {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 8vw, 3rem);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-gold);
+  line-height: 1.25;
+  padding: 0.15rem 0;
+}
+.couple__tagline {
+  font-size: 1.125rem;          /* was 1rem */
+  font-weight: 500;
+  font-style: italic;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* Walking couple illustration */
+.couple__illustration {
+  width: 100%;
+  max-width: 260px;
+}
+.couple__walk-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 4px 16px rgba(123,28,43,0.1));
+}
+
+/* Date badge */
+.couple__date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1.25rem 2.5rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: 4px;
+  background: rgba(253,246,236,0.7);
+  position: relative;
+}
+.couple__date-badge::before,
+.couple__date-badge::after {
+  content: '';
+  position: absolute;
+  width: 7px; height: 7px;
+  background: var(--color-gold);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+.couple__date-badge::before { top: -3.5px; left: -3.5px; }
+.couple__date-badge::after  { bottom: -3.5px; right: -3.5px; }
+
+.date-badge__top {
+  font-family: var(--font-display);
+  font-size: 1.375rem;          /* was 1.25 */
+  font-style: italic;
+  font-weight: 600;             /* was 400 */
+  color: var(--color-maroon);
+}
+.date-badge__separator { color: var(--color-gold); font-size: 0.65rem; }
+.date-badge__bottom {
+  font-size: 1rem;              /* was 0.875 — larger for readability */
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+/* Countdown timer */
+.countdown {
+  width: 100%;
+  max-width: 370px;
+  background: rgba(253,246,236,0.8);
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.375rem 0.875rem;
+  box-shadow: 0 4px 28px rgba(123,28,43,0.08);
+}
+.countdown__label {
+  font-size: 0.8rem;            /* was 0.7 — larger */
+  font-weight: 600;             /* was none */
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+  text-align: center;
+  margin-bottom: 0.875rem;
+  font-family: var(--font-body);
+}
+.countdown__grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 60px;
+}
+.countdown__number {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6.5vw, 2.5rem);
+  font-weight: 700;             /* was 500 */
+  color: var(--color-maroon);
+  line-height: 1;
+  transition: transform 0.15s var(--ease-out);
+}
+.countdown__number.tick { transform: scale(1.14); }
+.countdown__name {
+  font-size: 0.65rem;           /* was 0.58 — larger */
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+}
+.countdown__sep {
+  font-size: 1.75rem;
+  color: var(--color-gold);
+  font-family: var(--font-display);
+  font-weight: 700;
+  padding-bottom: 1rem;
+  opacity: 0.65;
+  flex-shrink: 0;
+}
+
+
+/* =============================================================
+   SECTION 3 · TEMPLE CEREMONY
+   FIX: temple left enlarged, padding reduced
+   ============================================================= */
+.section--ceremony {
+  padding-top: var(--space-xl);
+  padding-bottom: 1.5rem;
+}
+.section--ceremony .section__inner {
+  gap: 0.5rem;
+}
+
+/* Temple gopurams — FIX #4: left temple enlarged */
+.ceremony__temple {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  object-fit: contain;
+  object-position: bottom;
+}
+.ceremony__temple--right {
+  right: 0;
+  width: 42%;
+  max-width: 195px;
+}
+.ceremony__temple--left {
+  left: 0;
+  width: 38%;                   /* was 22% — now clearly visible */
+  max-width: 175px;             /* was 110px */
+  object-position: bottom left;
+}
+
+.ceremony__inner {
+  position: relative;
+  z-index: 3;
+}
+
+/* Tamil header */
+.ceremony__tamil-head { text-align: center; }
+.tamil-sub {
+  font-size: 0.875rem;          /* was 0.75 */
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  font-family: var(--font-body);
+  margin-bottom: 0.4rem;
+}
+.tamil-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8vw, 3.25rem);   /* was 1.75 min */
+  font-weight: 700;             /* was 400 */
+  color: var(--color-maroon);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+/* Ceremony scene composite
+   mix-blend-mode: multiply makes black canvas transparent.
+   Pull wrapper up to offset invisible blank canvas height. */
+.ceremony__scene {
+  width: 100%;
+  max-width: 370px;
+  margin-top: -30%;             /* offsets ~35.7% blank top canvas */
+}
+.ceremony__scene-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 6px 20px rgba(123,28,43,0.08));
+}
+
+
+/* =============================================================
+   SECTION 4 · RECEPTION
+   FIX: padding-bottom = content only, trees are decorative absolute
+   ============================================================= */
+.section--reception {
+  padding-top: var(--space-xl);
+  padding-bottom: 1.5rem;
+}
+.section--reception .section__inner {
+  gap: 0.5rem;
+}
+
+/* Decorative tree/flower edges */
+.reception__tree {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  object-fit: contain;
+  object-position: bottom;
+}
+.reception__tree--left {
+  left: 0;
+  width: 36%;
+  max-width: 180px;
+}
+.reception__tree--right {
+  right: 0;
+  width: 26%;
+  max-width: 130px;
+}
+
+.reception__header { text-align: center; }
+.reception__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 7.5vw, 3rem);
+  font-weight: 700;             /* was 400 */
+  color: var(--color-maroon);
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+.reception__underline {
+  width: 80px; height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-gold), transparent);
+  margin: 0.75rem auto 0;
+}
+
+/* Reception scene composite
+   mix-blend-mode: multiply makes black canvas transparent.
+   Pull wrapper up to offset invisible blank canvas height. */
+.reception__scene {
+  width: 100%;
+  max-width: 370px;
+  position: relative;
+  z-index: 3;
+  margin-top: -50%;             /* offsets ~57% blank top canvas */
+}
+.reception__scene-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 6px 20px rgba(123,28,43,0.08));
+}
+
+
+/* =============================================================
+   EVENT CARDS (shared — ceremony & reception)
+   FIX: font sizes and weights boosted throughout
+   ============================================================= */
+.event-card {
+  width: 100%;
+  max-width: 390px;
+  background: rgba(253,246,236,0.92);
+  border: 1.5px solid var(--color-border);
+  border-radius: 10px;
+  padding: 1.5rem 1.375rem;
+  box-shadow: 0 4px 32px rgba(123,28,43,0.09), 0 1px 4px rgba(0,0,0,0.04);
+  transition: transform var(--duration-fast) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+  z-index: 4;
+}
+.event-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2.5px;
+  background: linear-gradient(to right, transparent, var(--color-gold), transparent);
+}
+.event-card:hover { transform: translateY(-3px); }
+
+.event-card__title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;            /* was 1.3125 */
+  font-weight: 700;             /* was 400 */
+  letter-spacing: 0.06em;
+  color: var(--color-maroon);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: var(--space-xs);
+}
+.event-card__divider {
+  width: 60px; height: 1.5px;
+  background: linear-gradient(to right, transparent, var(--color-gold), transparent);
+  margin: 0 auto var(--space-sm);
+}
+.event-card__detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  font-size: 1.0625rem;         /* was 1rem */
+  font-weight: 500;             /* was none */
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 0.625rem;
+  text-align: left;
+}
+.event-card__icon {
+  flex-shrink: 0;
+  font-size: 1rem;              /* was 0.875 */
+  margin-top: 0.15rem;
+}
+.event-card__cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid rgba(184,146,42,0.18);
+}
+.event-card__join {
+  font-size: 0.9375rem;         /* was 0.8125 */
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--color-gold);
+  font-style: italic;
+}
+.event-card__invite {
+  font-size: 0.875rem;          /* was 0.75 */
+  font-weight: 500;
+  color: var(--color-text-soft);
+  font-style: italic;
+}
+
+/* Button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;            /* was 0.8 */
+  font-weight: 700;             /* was none */
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  min-height: 48px;             /* was 44px — better tap target */
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color      var(--duration-fast) var(--ease-out),
+    transform  var(--duration-fast) var(--ease-out);
+}
+.btn--outline {
+  color: var(--color-maroon);
+  background: transparent;
+  border: 2px solid var(--color-maroon);   /* was 1px — thicker, easier to see */
+}
+.btn--outline:hover {
+  background: var(--color-maroon);
+  color: var(--color-cream);
+  transform: scale(1.04);
+  box-shadow: 0 4px 18px rgba(123,28,43,0.2);
+}
+.btn--outline:active { transform: scale(0.97); }
+.btn__icon { width: 16px; height: 16px; flex-shrink: 0; }
+
+
+/* =============================================================
+   SECTION 5 · CLOSING
+   FIX: font sizes and weights boosted, Vinayagar enlarged
+   ============================================================= */
+.section--closing {
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-lg);
+}
+/* Tighten gap between elements in closing section only */
+.section--closing .section__inner {
+  gap: 0.5rem;
+}
+
+/* Small Vinayagar — same size boost as hero one */
+.closing__symbol { margin-bottom: 0.25rem; }
+.closing__vinayagar {
+  width: 72px;                  /* was 44px */
+  height: auto;
+  margin: 0 auto;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 2px 6px rgba(184,146,42,0.25));
+}
+
+.closing__motif { color: var(--color-gold); opacity: 0.75; }
+.motif-svg { width: 180px; height: 36px; }
+
+.closing__tamil-intro {
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 5vw, 1.875rem);   /* was 1.125 min */
+  font-weight: 600;             /* was 400 */
+  color: var(--color-gold);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+.closing__names-tamil {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.closing__name-tamil {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8vw, 3.25rem);   /* was 1.75 min */
+  font-weight: 700;             /* was 400 */
+  color: var(--color-maroon);
+  line-height: 1.12;
+  letter-spacing: 0.02em;
+}
+.closing__meta-text {
+  font-size: 1rem;              /* was 0.9 */
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Couple at mandap scene
+   mix-blend-mode: multiply makes black canvas transparent on beige bg.
+   The image still has physical height from the blank canvas.
+   Pull the wrapper UP by ~65% of its own width to offset the invisible top portion,
+   so the couple illustration appears right after the text with no gap. */
+.closing__scene {
+  width: 100%;
+  max-width: 340px;
+  margin-top: -62%;             /* pulls wrapper up — offsets invisible blank canvas */
+}
+.closing__scene-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 6px 20px rgba(123,28,43,0.1));
+}
+
+/* Family names */
+.closing__families {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 1.25rem 1.5rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  background: rgba(253,246,236,0.65);
+  width: 100%;
+  max-width: 400px;
+}
+.family-block { text-align: center; }
+.family-block__role {
+  font-size: 0.75rem;           /* was 0.6875 */
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  font-family: var(--font-body);
+  margin-bottom: 0.3rem;
+}
+.family-block__name {
+  font-family: var(--font-display);
+  font-size: 1.125rem;          /* was 1rem */
+  font-style: italic;
+  font-weight: 600;
+  color: var(--color-maroon);
+}
+.family-block__sep {
+  font-size: 1rem;
+  color: var(--color-gold);
+  opacity: 0.75;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.closing__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.closing__footer-text {
+  font-family: var(--font-display);
+  font-size: 1.125rem;          /* was 1rem */
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-text-soft);
+  letter-spacing: 0.06em;
+}
+
+
+/* ── Tablet (640px+) ─────────────────────────────────────────── */
+@media (min-width: 640px) {
+  .hero__tree            { width: 35%; max-width: 190px; }
+  .ceremony__temple--right { width: 35%; }
+  .ceremony__temple--left  { width: 32%; max-width: 155px; }
+  .reception__tree--left   { width: 30%; }
+  .reception__tree--right  { width: 22%; }
+  .closing__families       { flex-wrap: nowrap; gap: 2.5rem; }
+}
+
+/* ── Desktop (1024px+) ───────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .section {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+  .hero__tree              { width: 26%; max-width: 240px; }
+  .ceremony__temple--right { width: 26%; }
+  .ceremony__temple--left  { width: 24%; max-width: 140px; }
+  .reception__tree--left   { width: 22%; }
+  .reception__tree--right  { width: 17%; }
+
+  /* On desktop hero headline can be even bigger */
+  .hero__headline {
+    font-size: 4rem;
+  }
+}
+
+/* ── Reduced Motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+  .scroll-cue__arrow { animation: none; }
+}

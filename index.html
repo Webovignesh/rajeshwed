@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rajesh & Vishnupriya — Wedding Invitation</title>
+  <meta name="description" content="Join us to celebrate the wedding of Rajesh and Vishnupriya on 04 May 2026" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!--
+    Playfair Display: wght 400,500,600,700 — bold weights for headings
+    Cormorant Garamond: wght 500,600,700 — medium/bold weights for body
+    (avoiding thin 300/400 weights that are hard to read for elderly users)
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ==================== SCROLL PROGRESS BAR ==================== -->
+  <div class="progress-bar" id="progressBar" aria-hidden="true"></div>
+
+  <!-- ==================== MUSIC TOGGLE ==================== -->
+  <button class="music-toggle" id="musicToggle" aria-label="Toggle background music">
+    <!-- Muted state icon -->
+    <svg class="icon icon--muted" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <!-- Playing state icon -->
+    <svg class="icon icon--playing" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span class="music-toggle__label" id="musicLabel">Music</span>
+  </button>
+
+  <!-- Background audio: NO muted attr — JS controls playback entirely -->
+  <audio id="bgMusic" loop>
+    <source src="music/Flute.mp3" type="audio/mpeg" />
+  </audio>
+
+
+  <!-- =====================================================================
+       SECTION 1 · HERO
+       Images used:
+         banna.webp           → banana tree bottom-left  (mix-blend removes black)
+         banna_2.webp         → banana tree bottom-right (mirrored)
+         vinayagar.webp       → Ganesh symbol top-center (enlarged to 90px)
+         couple-solo.webp     → couple embrace illustration
+       FIXES:
+         • hero__content has text-align:center so headline is always centred
+         • Vinayagar enlarged: 90px wide
+         • Font weight: 700 (bold) — clearly readable
+  ====================================================================== -->
+  <section class="section section--hero" id="hero">
+
+    <!-- Parchment texture background -->
+
+    <!-- Banana trees — absolute, bottom corners, black removed via mix-blend -->
+    <img src="/images/banna.webp"   class="hero__tree hero__tree--left"  alt="" aria-hidden="true" />
+    <img src="images/banna 2.webp" class="hero__tree hero__tree--right" alt="" aria-hidden="true" />
+
+    <!-- Hero content — centred column -->
+    <div class="hero__content">
+
+      <!-- Vinayagar symbol (enlarged) -->
+      <div class="hero__monogram animate-on-scroll" data-delay="0">
+        <img src="images/vinayagar.webp" class="hero__vinayagar" alt="Sri Vinayagar" />
+      </div>
+
+      <!-- Text ABOVE the illustration (matches screenshot order) -->
+      <div class="hero__text">
+        <p class="hero__eyebrow animate-on-scroll" data-delay="80">— Save The Date —</p>
+        <h1 class="hero__headline animate-on-scroll" data-delay="180">
+          We Are Getting<br />Married
+        </h1>
+        <div class="hero__divider animate-on-scroll" data-delay="280" aria-hidden="true">
+          <span class="divider__line"></span>
+          <span class="divider__diamond">◆</span>
+          <span class="divider__line"></span>
+        </div>
+        <p class="hero__date animate-on-scroll" data-delay="380">04 May 2026</p>
+      </div>
+
+      <!-- Couple embrace illustration (below text) -->
+      <div class="hero__illustration animate-on-scroll" data-delay="500">
+        <img src="images/couple-solo.webp" class="hero__couple-img" alt="Bride and groom illustrated in traditional attire" />
+      </div>
+
+    </div>
+
+    <!-- Scroll cue -->
+    <div class="hero__scroll-cue animate-on-scroll" data-delay="680" aria-hidden="true">
+      <span class="scroll-cue__text">Scroll</span>
+      <div class="scroll-cue__arrow"></div>
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================================
+       SECTION 2 · COUPLE INTRO
+       Images used:
+         couple_walk.webp     → walking couple centred
+  ====================================================================== -->
+  <section class="section section--couple" id="couple">
+
+    <div class="section__inner">
+
+      <p class="section__label animate-on-scroll" data-delay="0">Bound by Love, Blessed for Life</p>
+
+      <!-- Names — large, bold, clearly readable -->
+      <div class="couple__names animate-on-scroll" data-delay="100">
+        <h2 class="couple__name">Rajesh</h2>
+        <div class="couple__ampersand">&amp;</div>
+        <h2 class="couple__name">Vishnupriya</h2>
+      </div>
+
+      <p class="couple__tagline animate-on-scroll" data-delay="180">
+        Are beginning their story together
+      </p>
+
+      <!-- Walking couple -->
+      <div class="couple__illustration animate-on-scroll" data-delay="260">
+        <img
+          src="images/couple walk.webp"
+          class="couple__walk-img"
+          alt="Illustrated bride and groom walking hand in hand"
+        />
+      </div>
+
+      <!-- Date badge -->
+      <div class="couple__date-badge animate-on-scroll" data-delay="340">
+        <span class="date-badge__top">04 May 2026</span>
+        <span class="date-badge__separator" aria-hidden="true">✦</span>
+        <span class="date-badge__bottom">திங்கட்கிழமை</span>
+      </div>
+
+      <!-- Live countdown timer -->
+      <div class="countdown animate-on-scroll" data-delay="440" aria-live="polite" aria-label="Countdown to wedding">
+        <p class="countdown__label">Days until celebration</p>
+        <div class="countdown__grid">
+          <div class="countdown__unit">
+            <span class="countdown__number" id="countDays">00</span>
+            <span class="countdown__name">Days</span>
+          </div>
+          <div class="countdown__sep" aria-hidden="true">:</div>
+          <div class="countdown__unit">
+            <span class="countdown__number" id="countHours">00</span>
+            <span class="countdown__name">Hours</span>
+          </div>
+          <div class="countdown__sep" aria-hidden="true">:</div>
+          <div class="countdown__unit">
+            <span class="countdown__number" id="countMinutes">00</span>
+            <span class="countdown__name">Mins</span>
+          </div>
+          <div class="countdown__sep" aria-hidden="true">:</div>
+          <div class="countdown__unit">
+            <span class="countdown__number" id="countSeconds">00</span>
+            <span class="countdown__name">Secs</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================================
+       SECTION 3 · TEMPLE CEREMONY
+       Images used:
+         temple.webp               → large gopuram, right edge peek
+         temple_end.webp           → smaller gopuram, LEFT EDGE (enlarged: 38%)
+         download_third_page.webp  → full ceremony scene composite
+       FIX: temple_end (left) width increased from 22% → 38%
+  ====================================================================== -->
+  <section class="section section--ceremony" id="ceremony">
+    <!-- Temple gopurams peek from left and right bottom edges -->
+    <img src="images/temple.webp"     class="ceremony__temple ceremony__temple--right" alt="" aria-hidden="true" />
+    <img src="images/temple end.webp" class="ceremony__temple ceremony__temple--left"  alt="" aria-hidden="true" />
+
+    <div class="section__inner ceremony__inner">
+
+      <!-- Tamil auspicious header -->
+      <div class="ceremony__tamil-head animate-on-scroll" data-delay="0">
+        <p class="tamil-sub">Auspicious Muhurtam ✦</p>
+        <h2 class="tamil-title">முகூர்த்தம்</h2>
+      </div>
+
+      <!-- Full ceremony scene composite -->
+      <div class="ceremony__scene animate-on-scroll" data-delay="120">
+        <img
+          src="images/download third page.webp"
+          class="ceremony__scene-img"
+          alt="Temple ceremony — couple exchanging garlands with gopuram and banana trees"
+        />
+      </div>
+
+      <!-- Event info card -->
+      <div class="event-card animate-on-scroll" data-delay="250">
+        <h3 class="event-card__title">Temple Ceremony</h3>
+        <div class="event-card__divider" aria-hidden="true"></div>
+
+        <div class="event-card__detail">
+          <span class="event-card__icon" aria-hidden="true">🕘</span>
+          <span>9:30 AM</span>
+        </div>
+        <div class="event-card__detail">
+          <span class="event-card__icon" aria-hidden="true">🛕</span>
+          <span>Sri Mela Vaasal Subramaniya<br />Swamy Temple</span>
+        </div>
+
+        <div class="event-card__cta-group animate-on-scroll" data-delay="350">
+          <a href="https://www.google.com/maps/place/Mela+Vaasal+Subramaniya+Swamy+Temple,+49A,+S+Bazaar,+Palayamkottai,+Tirunelveli,+Tamil+Nadu+627002/data=!4m2!3m1!1s0x3b04121d4a2a2f05:0x767de8f2acc61ae1!18m1!1e1?utm_source=mstt_1&entry=gps&coh=192189&g_ep=CAESBzI2LjE1LjEYACDXggMqlAEsOTQyNjc3MjcsOTQyOTIxOTUsOTQyOTk1MzIsMTAwNzk2NDk4LDEwMDc5Nzc2MSwxMDA3OTY1MzUsOTQyODQ0OTAsOTQyODA1NzYsOTQyMDczOTQsOTQyMDc1MDYsOTQyMDg1MDYsOTQyMTg2NTMsOTQyMjk4MzksOTQyNzUxNjgsOTQyNzk2MTksMTAwNzk5MjUxQgJJTg%3D%3D&skid=b8a0407c-4f62-48cf-b809-b7653b32fad5&g_st=ac" target="_blank" rel="noopener" class="btn btn--outline">
+            <svg class="btn__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
+            </svg>
+            Get Directions
+          </a>
+          <p class="event-card__join">✦ Join The Celebrations ✦</p>
+          <p class="event-card__invite">"Join us for THE CELEBRATION"</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+<br><br><br>
+
+  <!-- =====================================================================
+       SECTION 4 · RECEPTION & FEAST
+       Images used:
+         trees.webp           → banana + roses, bottom-left
+         tress_1.webp         → tropical flowers, bottom-right
+         download.webp        → full reception scene composite
+  ====================================================================== -->
+  <section class="section section--reception" id="reception">
+    <!-- Decorative plant edges -->
+    <img src="images/trees.webp"   class="reception__tree reception__tree--left"  alt="" aria-hidden="true" />
+    <img src="images/tress 1.webp" class="reception__tree reception__tree--right" alt="" aria-hidden="true" />
+
+    <div class="section__inner">
+
+      <div class="reception__header animate-on-scroll" data-delay="0">
+        <h2 class="reception__title">Reception &amp; Feast</h2>
+        <div class="reception__underline" aria-hidden="true"></div>
+      </div>
+
+      <!-- Full reception composite scene -->
+      <div class="reception__scene animate-on-scroll" data-delay="120">
+        <img
+          src="images/download.webp"
+          class="reception__scene-img"
+          alt="Reception — couple under decorated mandap flanked by flowers and banana trees"
+        />
+      </div>
+
+      <!-- Event info card -->
+      <div class="event-card event-card--reception animate-on-scroll" data-delay="250">
+        <h3 class="event-card__title">Reception &amp; Feast</h3>
+        <div class="event-card__divider" aria-hidden="true"></div>
+
+        <div class="event-card__detail">
+          <span class="event-card__icon" aria-hidden="true">🕙</span>
+          <span>10:00 AM – 3:00 PM</span>
+        </div>
+        <div class="event-card__detail">
+          <span class="event-card__icon" aria-hidden="true">🏛️</span>
+          <span>Nachiyar Mahal A/C<br />VM Chatram</span>
+        </div>
+
+        <div class="event-card__cta-group animate-on-scroll" data-delay="350">
+          <a href="https://www.google.com/maps/place/Nachiyar+A%2FC+Mahal/@8.7105125,77.7683469,17z/data=!3m1!4b1!4m6!3m5!1s0x3b040d21bd5f53a3:0xbb41fa28cd95f1b2!8m2!3d8.7105125!4d77.7683469!16s%2Fg%2F11tnm0vrwj!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" class="btn btn--outline">
+            <svg class="btn__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
+            </svg>
+            Get Directions
+          </a>
+          <p class="event-card__join">✦ Join The Celebrations ✦</p>
+          <p class="event-card__invite">"Join us for THE CELEBRATION"</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================================
+       SECTION 5 · CLOSING — Tamil Invite
+       Images used:
+         vinayagar.webp       → small Ganesh symbol top (72px)
+         couple_end.webp      → couple at mandap
+  ====================================================================== -->
+  <section class="section section--closing" id="closing">
+    <div class="section__inner">
+
+      <!-- Small Ganesh symbol -->
+      <div class="closing__symbol animate-on-scroll" data-delay="0">
+        <img src="images/vinayagar.webp" class="closing__vinayagar" alt="" aria-hidden="true" />
+      </div>
+
+      <!-- Ornamental line -->
+      <div class="closing__motif animate-on-scroll" data-delay="60" aria-hidden="true">
+        <svg viewBox="0 0 200 40" class="motif-svg">
+          <line x1="0" y1="20" x2="70" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
+          <circle cx="85" cy="20" r="3" fill="currentColor" opacity="0.7"/>
+          <circle cx="100" cy="20" r="5" fill="none" stroke="currentColor" stroke-width="1" opacity="0.8"/>
+          <circle cx="115" cy="20" r="3" fill="currentColor" opacity="0.7"/>
+          <line x1="130" y1="20" x2="200" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
+        </svg>
+      </div>
+
+      <!-- Tamil invite text -->
+      <div class="closing__tamil animate-on-scroll" data-delay="120">
+        <p class="closing__tamil-intro">அன்போடு அழைக்கிறோம்</p>
+      </div>
+
+      <br><br><br>
+      <!-- Tamil names -->
+      <div class="closing__names-tamil animate-on-scroll" data-delay="200">
+        <h2 class="closing__name-tamil">ராஜேஷ் &amp;</h2>
+        <h2 class="closing__name-tamil">விஷ்ணுப்பிரியா</h2>
+      </div>
+<br>
+      <!-- Date in Tamil -->
+      <div class="closing__meta animate-on-scroll" data-delay="280">
+        <p class="closing__meta-text">04 மே 2026 · திங்கட்கிழமை</p>
+      </div>
+<br>
+      <!-- Couple at mandap scene -->
+      <div class="closing__scene animate-on-scroll" data-delay="340">
+        <img
+          src="images/couple end.webp"
+          class="closing__scene-img"
+          alt="Bride and groom at the decorated wedding mandap"
+        />
+      </div>
+
+      <!-- Footer -->
+      <footer class="closing__footer animate-on-scroll" data-delay="500">
+        <div class="closing__motif" aria-hidden="true">
+          <svg viewBox="0 0 200 40" class="motif-svg">
+            <line x1="0" y1="20" x2="70" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
+            <circle cx="85" cy="20" r="3" fill="currentColor" opacity="0.7"/>
+            <circle cx="100" cy="20" r="5" fill="none" stroke="currentColor" stroke-width="1" opacity="0.8"/>
+            <circle cx="115" cy="20" r="3" fill="currentColor" opacity="0.7"/>
+            <line x1="130" y1="20" x2="200" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
+          </svg>
+        </div>
+        <p class="closing__footer-text">With love &amp; blessings</p>
+      </footer>
+
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
